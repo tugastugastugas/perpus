@@ -34,21 +34,22 @@ class BookingController extends BaseController
 
     // Ambil data dengan status active (Bermain), urutkan berdasarkan durasi terpendek
     $playActive = DB::table('play')
-        ->join('wahana', 'wahana.id_wahana', '=', 'play.id_wahana')
-        ->where('play.status', 'active') // Hanya ambil yang active
-        ->orderBy('play.durasi', 'asc') // Urutkan berdasarkan durasi terpendek
-        ->select(
-            'wahana.nama_wahana',
-            'play.nama_anak',
-            'play.nohp',
-            'play.start',
-            'play.end',
-            'play.id_play',
-            'play.durasi',
-            'play.id_wahana',
-            'play.status',
-        )
-        ->get();
+    ->join('wahana', 'wahana.id_wahana', '=', 'play.id_wahana')
+    ->whereIn('play.status', ['active', 'pending']) // Ambil yang active atau pending
+    ->orderBy('play.durasi', 'asc') // Urutkan berdasarkan durasi terpendek
+    ->select(
+        'wahana.nama_wahana',
+        'play.nama_anak',
+        'play.nohp',
+        'play.start',
+        'play.end',
+        'play.id_play',
+        'play.durasi',
+        'play.id_wahana',
+        'play.status',
+    )
+    ->get();
+
 
     // Ambil data dengan status completed (Selesai), urutkan berdasarkan durasi terpendek
     $playCompleted = DB::table('play')
@@ -110,9 +111,9 @@ class BookingController extends BaseController
         $play->durasi = $request->durasi;
         $play->nama_anak = $request->nama_anak;
         $play->nohp = $request->nohp;
-        $play->start = $start;
-        $play->end = $end;
-        $play->status = 'active';
+        // $play->start = $start;
+        // $play->end = $end;
+        $play->status = 'pending';
         $play->save();
     
         // Ambil harga wahana berdasarkan id_wahana
@@ -226,4 +227,140 @@ public function updateStatus(Request $request, $id)
             return redirect()->back()->withErrors(['msg' => 'Gagal memperbarui detail pengguna. Silakan coba lagi.']);
         }
     }
+    
+    public function getData($id_play)
+{
+    $transaksi = Transaksi::where('id_play', $id_play)->first();
+
+    if (!$transaksi) {
+        return response()->json(['error' => 'Data transaksi tidak ditemukan'], 404);
+    }
+
+    return response()->json([
+        'no_transaksi' => $transaksi->no_transaksi,
+        'harga' => $transaksi->harga,
+    ]);
+}
+
+public function store(Request $request)
+{
+    // Validasi data
+    $request->validate([
+        'id_play' => 'required|exists:play,id_play', // Pastikan id_play ada di tabel play
+        'bayar' => 'required|integer|min:0',
+        'kembalian' => 'required|integer|min:0',
+    ]);
+
+    // Cari transaksi berdasarkan id_play
+    $transaksi = Transaksi::where('id_play', $request->id_play)->first();
+
+    if (!$transaksi) {
+        return redirect()->back()->withErrors(['error' => 'Transaksi tidak ditemukan']);
+    }
+
+    // Update data transaksi
+    $transaksi->bayar = $request->bayar;
+    $transaksi->kembalian = $request->kembalian;
+    $transaksi->status = 'completed'; // Atur status menjadi selesai
+    $transaksi->updated_at = now();
+    $transaksi->save();
+
+    $play = Play::where('id_play', $request->id_play)->first();
+
+    $start = now();
+    // Ambil durasi jam dari request
+    $durasiJam = (int) filter_var($play->durasi, FILTER_SANITIZE_NUMBER_INT);
+
+    // Hitung waktu akhir dengan menambah durasi jam ke waktu sekarang
+    $end = $start->copy()->addHours($durasiJam);
+
+    $play->start = $start;
+    $play->end = $end;
+    $play->status = 'active';
+    $play->save();
+
+    // Redirect kembali dengan pesan sukses
+    return redirect()->back()->with('success', 'Transaksi berhasil diperbarui');
+}
+
+public function sendWhatsapp($id_play)
+{
+    Log::info("sendWhatsapp called for play ID: {$id_play}");
+
+    // Ambil data play berdasarkan id
+    $dataPlay = DB::table('play')
+        ->join('wahana', 'play.id_wahana', '=', 'wahana.id_wahana') // Join dengan tabel wahana
+        ->where('play.id_play', $id_play)
+        ->select('play.nama_anak', 'play.nohp', 'wahana.nama_wahana', 'play.durasi') // Pilih kolom yang diperlukan
+        ->first();
+    
+    // Pastikan ada data yang ditemukan
+    if ($dataPlay) {
+        Log::info("Data play found for ID: {$id_play}");
+
+        // Format nomor WhatsApp (misalnya, ke nomor orang tua)
+        $nohp = $dataPlay->nohp;
+
+        // Pesan yang akan dikirim
+        $message = "🎉 **Pengumuman** 🎉\n\nWaktu untuk anak **{$dataPlay->nama_anak}** pada wahana **{$dataPlay->nama_wahana}** dengan durasi **{$dataPlay->durasi}** sudah **habis**! ⏰\n\nSemoga Anak-Anak anda menikmati waktunya! Jangan lupa untuk check-in di wahana lainnya! 🏰🎢";
+        
+        $params = [
+            'token' => 'j3npmeiwh775lm7e',
+            'to' => $this->formatWhatsappNumber($nohp),
+            'body' => $message,
+            'priority' => '1',
+        ];
+
+        // Kirim pesan menggunakan cURL
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL => "https://api.ultramsg.com/instance103952/messages/chat",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => http_build_query($params),
+            CURLOPT_HTTPHEADER => [
+                "content-type: application/x-www-form-urlencoded"
+            ],
+        ]);
+
+        $response = curl_exec($ch);
+        $err = curl_error($ch);
+        curl_close($ch);
+
+        // Log hasil
+        if ($err) {
+            Log::error("cURL Error #: " . $err);
+        } else {
+            Log::info("Respon dari API: " . $response);
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    return response()->json(['status' => 'fail', 'message' => 'Data not found']);
+}
+
+
+    
+// Fungsi untuk memformat nomor ke format internasional
+private function formatWhatsappNumber($number) {
+    // Hapus karakter non-digit
+    $number = preg_replace('/\D/', '', $number);
+
+    // Tambahkan kode negara jika hilang
+    if (substr($number, 0, 1) === '0') {
+        $number = '62' . substr($number, 1); // Ganti 0 di awal dengan 62
+    }
+
+    // Tambahkan suffix untuk WhatsApp API
+    return $number . '@c.us';
+}
+
+
 }

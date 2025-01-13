@@ -21,6 +21,7 @@ class Play extends Authenticatable
         'start',
         'end',
         'durasi',
+        'status',
         'created_at',
         'updated_at',
     ];

@@ -97,3 +97,6 @@ Route::post('/wahana/update', action: [BookingController::class, 'updateDetail']
 Route::delete('/play-destroy/{id_play}', [BookingController::class, 'play_destroy'])->name('play.destroy');
 Route::get('/wahana/detail/{id}', [BookingController::class, 'e_wahana'])->name('e_wahana');
 Route::post('/update-status/{id}', [BookingController::class, 'updateStatus']);
+Route::get('/transaksi/data/{id_play}', [BookingController::class, 'getData'])->name('transaksi.data');
+Route::post('/transaksi/store', [BookingController::class, 'store'])->name('transaksi.store');
+Route::get('/send-whatsapp/{id_play}', [BookingController::class, 'sendWhatsapp']);
