@@ -12,6 +12,7 @@ use App\Http\Controllers\WahanaController;
 use App\Http\Controllers\RestoreEditController;
 use App\Http\Controllers\RestoreDeleteController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\TransaksiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +91,7 @@ Route::post('/wahana/update', action: [WahanaController::class, 'updateDetail'])
 Route::delete('/wahana-destroy/{id_wahana}', [WahanaController::class, 'wahana_destroy'])->name('wahana.destroy');
 Route::get('/wahana/detail/{id}', [WahanaController::class, 'e_wahana'])->name('e_wahana');
 
+// ROUTE BOOKING
 Route::get('/booking', [BookingController::class, 'booking'])
     ->name('booking');
 Route::post('/t_anak', [BookingController::class, 't_anak'])->name('t_anak');
@@ -100,3 +102,15 @@ Route::post('/update-status/{id}', [BookingController::class, 'updateStatus']);
 Route::get('/transaksi/data/{id_play}', [BookingController::class, 'getData'])->name('transaksi.data');
 Route::post('/transaksi/store', [BookingController::class, 'store'])->name('transaksi.store');
 Route::get('/send-whatsapp/{id_play}', [BookingController::class, 'sendWhatsapp']);
+
+// ROUTE LAPORAN TRANSAKSI
+Route::get('/transaksi', [TransaksiController::class, 'transaksi'])
+    ->name('transaksi');
+Route::post('/t_transaksi', [TransaksiController::class, 't_transaksi'])->name('t_transaksi');
+Route::post('/transaksi/update', action: [TransaksiController::class, 'updateDetail'])->name('update.transaksi');
+Route::delete('/transaksi-destroy/{id_transaksi}', [TransaksiController::class, 'transaksi_destroy'])->name('transaksi.destroy');
+Route::get('/transaksi/detail/{id}', [TransaksiController::class, 'e_transaksi'])->name('e_transaksi');
+
+Route::get('/transaksi/print', [TransaksiController::class, 'print'])->name('transaksi.print');
+// web.php
+Route::post('/tambah-waktu', [TransaksiController::class, 'tambahWaktu'])->name('tambah.waktu');

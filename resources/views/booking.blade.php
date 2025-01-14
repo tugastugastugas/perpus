@@ -26,32 +26,31 @@
                         </thead>
                         <tbody>
                             @foreach($playActive as $data)
-                            <tr data-id="{{ $data->id_play }}">
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $data->nama_anak }}</td>
-                                <td>{{ $data->nama_wahana }}</td>
-                                <td>{{ $data->durasi }}</td>
-                                <td class="countdown" data-start="{{ $data->start }}" data-end="{{ $data->end }}">
-                                    Loading...
-                                </td>
-                                <td>{{ $data->status }}</td>
-                                <td>
-                                    @if ($data->status == 'pending')
-                                    <button class="btn btn-primary btn-sm open-transaksi-modal"
-                                        data-id-play="{{ $data->id_play }}"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#transaksiModal">Transaksi
-                                    </button>
-                                    @endif
-                                    <form action="{{ route('play.destroy', $data->id_play) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-danger btn-sm" type="submit"
-                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
+                                <tr data-id="{{ $data->id_play }}">
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $data->nama_anak }}</td>
+                                    <td>{{ $data->nama_wahana }}</td>
+                                    <td>{{ $data->durasi }}</td>
+                                    <td class="countdown" data-start="{{ $data->start }}" data-end="{{ $data->end }}">
+                                        Loading...
+                                    </td>
+                                    <td>{{ $data->status }}</td>
+                                    <td>
+                                        @if ($data->status == 'pending')
+                                            <button class="btn btn-primary btn-sm open-transaksi-modal"
+                                                data-id-play="{{ $data->id_play }}" data-bs-toggle="modal"
+                                                data-bs-target="#transaksiModal">Transaksi
+                                            </button>
+                                        @endif
+                                        <form action="{{ route('play.destroy', $data->id_play) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger btn-sm" type="submit"
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
@@ -95,23 +94,23 @@
                         </thead>
                         <tbody>
                             @foreach($playCompleted as $data)
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $data->nama_anak }}</td>
-                                <td>{{ $data->nama_wahana }}</td>
-                                <td>{{ $data->durasi }}</td>
-                                <td>Waktu Habis</td>
-                                <td>{{ $data->status }}</td>
-                                <td>
-                                    <form action="{{ route('play.destroy', $data->id_play) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-danger btn-sm" type="submit"
-                                            onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $data->nama_anak }}</td>
+                                    <td>{{ $data->nama_wahana }}</td>
+                                    <td>{{ $data->durasi }}</td>
+                                    <td>Waktu Habis</td>
+                                    <td>{{ $data->status }}</td>
+                                    <td>
+                                        <form action="{{ route('play.destroy', $data->id_play) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger btn-sm" type="submit"
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
+                                        </form>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
@@ -132,6 +131,7 @@
     </div>
 </div>
 
+
 <!-- Modal untuk Tabel Wahana -->
 <div class="modal fade" id="addWahanaModal" tabindex="-1" aria-labelledby="addWahanaModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -149,7 +149,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="nama_wahana" class="form-label">Nomor Hp Orang Tua</label>
-                        <input type="text" class="form-control" id="nohp" name="nohp" value="62" required oninput="checkPrefix(this)">
+                        <input type="text" class="form-control" id="nohp" name="nohp" value="62" required
+                            oninput="checkPrefix(this)">
                     </div>
 
                     <script>
@@ -164,7 +165,7 @@
                         <select class="form-select" id="wahana" name="wahana" required>
                             <option value="" disabled selected>Pilih Wahana</option>
                             @foreach ($wahana as $j)
-                            <option value="{{ $j->id_wahana }}">{{ $j->nama_wahana }}</option>
+                                <option value="{{ $j->id_wahana }}">{{ $j->nama_wahana }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -191,7 +192,7 @@
 <div class="modal fade" id="transaksiModal" tabindex="-1" aria-labelledby="transaksiModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{{route ('transaksi.store')}}" method="POST">
+            <form action="{{route('transaksi.store')}}" method="POST">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="transaksiModalLabel">Transaksi</h5>
@@ -226,10 +227,9 @@
 </div>
 
 
-
 <!-- BUAT COUNTDOWN -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const countdownElements = document.querySelectorAll('.countdown');
 
         countdownElements.forEach(element => {
@@ -261,13 +261,16 @@
 
 <!-- UPDATE COUNTDOWN -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const countdownElements = document.querySelectorAll('.countdown');
 
         countdownElements.forEach(element => {
             const start = new Date(element.dataset.start).getTime();
             const end = new Date(element.dataset.end).getTime();
             const row = element.closest('tr'); // Ambil baris tabel
+            const namaAnak = row.querySelector('td:nth-child(2)').textContent; // Ambil Nama Anak
+            const namaWahana = row.querySelector('td:nth-child(3)').textContent; // Ambil Nama Wahana
+            const durasi = row.querySelector('td:nth-child(4)').textContent; // Ambil Durasi
 
             let isWhatsappSent = false;
 
@@ -282,19 +285,21 @@
                     if (!isWhatsappSent) {
                         isWhatsappSent = true;
 
+
+
                         // Pindahkan data ke tabel sebelah via AJAX
                         const id = row.dataset.id;
 
                         fetch(`/update-status/${id}`, {
-                                method: 'POST',
-                                headers: {
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    status: 'completed'
-                                })
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                status: 'completed'
                             })
+                        })
                             .then(response => response.json())
                             .then(data => {
                                 if (data.success) {
@@ -307,11 +312,11 @@
 
                                     // Kirim pesan WhatsApp
                                     fetch(`/send-whatsapp/${id}`, {
-                                            method: 'GET',
-                                            headers: {
-                                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                                            },
-                                        })
+                                        method: 'GET',
+                                        headers: {
+                                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                                        },
+                                    })
                                         .then(response => response.json())
                                         .then(data => {
                                             if (data.status === 'success') {
@@ -322,6 +327,9 @@
                                         });
                                 }
                             });
+
+                        // Mainkan suara otomatis
+                        playVoiceMessage(namaAnak, namaWahana, durasi);
                     }
 
                     return;
@@ -338,12 +346,28 @@
             updateCountdown();
             setInterval(updateCountdown, 1000);
         });
+
+        function playVoiceMessage(namaAnak, namaWahana, durasi) {
+            const apiKey = '1fa7ef6f4da041789b6060e401cf9ae7'; // Ganti dengan API Key dari VoiceRSS
+            const text = `Waktu untuk anak ${namaAnak} pada wahana ${namaWahana} sudah habis! Waktu untuk anak ${namaAnak} pada wahana ${namaWahana} sudah habis! Waktu untuk anak ${namaAnak} pada wahana ${namaWahana} sudah habis!`;
+
+            // URL untuk API VoiceRSS
+            const url = `https://api.voicerss.org/?key=${apiKey}&hl=id-id&src=${encodeURIComponent(text)}`;
+
+            // Buat audio element
+            const audio = new Audio(url);
+            audio.play();
+        }
+
+
+
     });
 </script>
 
+
 <!-- TRANSAKSI -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const transaksiModal = document.getElementById('transaksiModal');
         const idPlayInput = document.getElementById('modal-id-play');
         const noTransaksiInput = document.getElementById('modal-no-transaksi');
@@ -353,7 +377,7 @@
 
         // Tambahkan event listener untuk tombol
         document.querySelectorAll('.open-transaksi-modal').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const idPlay = button.getAttribute('data-id-play');
 
                 // Reset form modal
@@ -379,7 +403,7 @@
         });
 
         // Hitung kembalian
-        bayarInput.addEventListener('input', function() {
+        bayarInput.addEventListener('input', function () {
             const bayar = parseInt(bayarInput.value) || 0;
             const harga = parseInt(hargaInput.value) || 0;
             const kembalian = bayar - harga;

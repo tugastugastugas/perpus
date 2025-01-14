@@ -35,6 +35,7 @@ class BookingController extends BaseController
     // Ambil data dengan status active (Bermain), urutkan berdasarkan durasi terpendek
     $playActive = DB::table('play')
     ->join('wahana', 'wahana.id_wahana', '=', 'play.id_wahana')
+    ->leftJoin('transaksi', 'transaksi.id_play', '=', 'play.id_play')
     ->whereIn('play.status', ['active', 'pending']) // Ambil yang active atau pending
     ->orderBy('play.durasi', 'asc') // Urutkan berdasarkan durasi terpendek
     ->select(
@@ -47,6 +48,8 @@ class BookingController extends BaseController
         'play.durasi',
         'play.id_wahana',
         'play.status',
+        'wahana.harga',
+        DB::raw('COALESCE(transaksi.harga, 0) as total_harga'),
     )
     ->get();
 
