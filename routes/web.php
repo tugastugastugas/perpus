@@ -29,7 +29,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', [Controller::class, 'dashboard'])->name('dashboard');
+Route::get('/dashboard', [Controller::class, 'dashboard'])
+->middleware('check.permission:dashboard')
+->name('dashboard');
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/aksi_login', [LoginController::class, 'aksi_login'])->name('aksi_login');
 Route::get('/register', [LoginController::class, 'register'])->name('register');
@@ -85,26 +87,30 @@ Route::get('/user/detail/{id}', [UserController::class, 'detail'])->name('detail
 
 // ROUTE WAHANA
 Route::get('/wahana', [WahanaController::class, 'wahana'])
+->middleware('check.permission:play')
     ->name('wahana');
 Route::post('/t_wahana', [WahanaController::class, 't_wahana'])->name('t_wahana');
 Route::post('/wahana/update', action: [WahanaController::class, 'updateDetail'])->name('update.wahana');
 Route::delete('/wahana-destroy/{id_wahana}', [WahanaController::class, 'wahana_destroy'])->name('wahana.destroy');
-Route::get('/wahana/detail/{id}', [WahanaController::class, 'e_wahana'])->name('e_wahana');
+Route::get('/wahana/detail/{id}', [WahanaController::class, 'e_wahana'])
+->middleware('check.permission:play')
+->name('e_wahana');
 
 // ROUTE BOOKING
 Route::get('/booking', [BookingController::class, 'booking'])
+->middleware('check.permission:play')
     ->name('booking');
 Route::post('/t_anak', [BookingController::class, 't_anak'])->name('t_anak');
-Route::post('/wahana/update', action: [BookingController::class, 'updateDetail'])->name('update.wahana');
 Route::delete('/play-destroy/{id_play}', [BookingController::class, 'play_destroy'])->name('play.destroy');
-Route::get('/wahana/detail/{id}', [BookingController::class, 'e_wahana'])->name('e_wahana');
 Route::post('/update-status/{id}', [BookingController::class, 'updateStatus']);
 Route::get('/transaksi/data/{id_play}', [BookingController::class, 'getData'])->name('transaksi.data');
 Route::post('/transaksi/store', [BookingController::class, 'store'])->name('transaksi.store');
 Route::get('/send-whatsapp/{id_play}', [BookingController::class, 'sendWhatsapp']);
+Route::post('/play/add-time', [BookingController::class, 'addTime'])->name('play.addTime');
 
 // ROUTE LAPORAN TRANSAKSI
 Route::get('/transaksi', [TransaksiController::class, 'transaksi'])
+->middleware('check.permission:play')
     ->name('transaksi');
 Route::post('/t_transaksi', [TransaksiController::class, 't_transaksi'])->name('t_transaksi');
 Route::post('/transaksi/update', action: [TransaksiController::class, 'updateDetail'])->name('update.transaksi');
@@ -112,5 +118,4 @@ Route::delete('/transaksi-destroy/{id_transaksi}', [TransaksiController::class, 
 Route::get('/transaksi/detail/{id}', [TransaksiController::class, 'e_transaksi'])->name('e_transaksi');
 
 Route::get('/transaksi/print', [TransaksiController::class, 'print'])->name('transaksi.print');
-// web.php
-Route::post('/tambah-waktu', [TransaksiController::class, 'tambahWaktu'])->name('tambah.waktu');
+

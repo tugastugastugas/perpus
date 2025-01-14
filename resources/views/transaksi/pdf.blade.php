@@ -17,6 +17,10 @@
         th {
             background-color: #f2f2f2;
         }
+        .total-row {
+            font-weight: bold;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -32,6 +36,10 @@
             </tr>
         </thead>
         <tbody>
+            @php
+                $totalHarga = 0; // Variabel untuk menyimpan total harga
+            @endphp
+
             @foreach($transaksi as $key => $data)
             <tr>
                 <td>{{ $key + 1 }}</td>
@@ -40,8 +48,15 @@
                 <td>{{ $data->nama_wahana }}</td>
                 <td>{{ $data->harga }}</td>
             </tr>
+            @php
+                $totalHarga += (float) str_replace(['Rp', ',', ' '], '', $data->harga); // Menghitung total harga dengan menghapus format
+            @endphp
             @endforeach
         </tbody>
     </table>
+
+    <div class="total-row">
+        <p>Total Harga: Rp {{ number_format($totalHarga, 0, ',', '.') }}</p>
+    </div>
 </body>
 </html>

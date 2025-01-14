@@ -10,6 +10,13 @@
                         <input type="hidden" name="user_level" value="{{ $userLevel }}">
                         <div class="form-group">
                             <label>
+                                <input type="checkbox" name="menus[]" value="Dashboard"
+                                    {{ isset($permissions['Dashboard']) && $permissions['Dashboard'] ? 'checked' : '' }}>
+                                Dashboard
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
                                 <input type="checkbox" name="menus[]" value="Setting"
                                     {{ isset($permissions['Setting']) && $permissions['Setting'] ? 'checked' : '' }}>
                                 Setting
@@ -17,9 +24,9 @@
                         </div>
                         <div class="form-group">
                             <label>
-                                <input type="checkbox" name="menus[]" value="Surat"
-                                    {{ isset($permissions['Surat']) && $permissions['Surat'] ? 'checked' : '' }}>
-                                Surat
+                                <input type="checkbox" name="menus[]" value="Play"
+                                    {{ isset($permissions['Play']) && $permissions['Play'] ? 'checked' : '' }}>
+                                Play
                             </label>
                         </div>
                         <button type="submit" class="btn btn-primary">Save Permissions</button>

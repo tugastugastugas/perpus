@@ -168,4 +168,6 @@ class TransaksiController extends BaseController
     $pdf = Pdf::loadView('transaksi.pdf', compact('transaksi'));
     return $pdf->download('laporan-transaksi.pdf');
 }
+
+
 }

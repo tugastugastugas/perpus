@@ -47,7 +47,6 @@ class UserController extends BaseController
             $request->validate([
                 'username' => 'required',
                 'password' => 'required',
-                'email' => 'required',
                 'level' => 'required',
             ]);
 
@@ -55,7 +54,6 @@ class UserController extends BaseController
             $user = new User(); // Ubah variabel dari $quiz menjadi $user untuk kejelasan
             $user->username = $request->input('username');
             $user->password = md5($request->input('password')); // Enkripsi password
-            $user->email = $request->input('email');
             $user->level = $request->input('level');
 
             // Simpan ke database
@@ -149,7 +147,6 @@ class UserController extends BaseController
             // Validasi input
             $request->validate([
                 'username' => 'required',
-                'email' => 'required',
                 'level' => 'required',
                 // Validasi lain sesuai kebutuhan
             ]);
@@ -161,7 +158,6 @@ class UserController extends BaseController
             UserHistory::create([
                 'id_user' => $user->id_user,
                 'username' => $user->username,
-                'email' => $user->email,
                 'level' => $user->level,
                 'created_at' => $user->created_at,
                 'updated_at' => $user->updated_at,
@@ -169,7 +165,6 @@ class UserController extends BaseController
 
             // Perbarui data user
             $user->username = $request->input('username');
-            $user->email = $request->input('email');
             $user->level = $request->input('level');
             $user->save();
 

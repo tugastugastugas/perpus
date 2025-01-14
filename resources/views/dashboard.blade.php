@@ -27,7 +27,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->nama_anak }}</td>
                                 <td>{{ $data->nama_wahana }}</td>
-                                <td>{{ $data->durasi }}</td>
+                                <td>{{ $data->durasi }} Jam</td>
                                 <td class="countdown" data-start="{{ $data->start }}" data-end="{{ $data->end }}">
                                     Loading...
                                 </td>
@@ -78,7 +78,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data->nama_anak }}</td>
                                 <td>{{ $data->nama_wahana }}</td>
-                                <td>{{ $data->durasi }}</td>
+                                <td>{{ $data->durasi }} Jam</td>
                                 <td>Waktu Habis</td>
                                 <td>{{ $data->status }}</td>
                             </tr>

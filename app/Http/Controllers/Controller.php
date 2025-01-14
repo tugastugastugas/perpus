@@ -28,7 +28,7 @@ class Controller extends BaseController
         $playActive = DB::table('play')
             ->join('wahana', 'wahana.id_wahana', '=', 'play.id_wahana')
             ->whereIn('play.status', ['active', 'pending']) // Ambil yang active atau pending
-            ->orderBy('play.durasi', 'asc') // Urutkan berdasarkan durasi terpendek
+            ->orderBy('play.end', 'asc') // Urutkan berdasarkan durasi terpendek
             ->select(
                 'wahana.nama_wahana',
                 'play.nama_anak',
@@ -47,7 +47,7 @@ class Controller extends BaseController
         $playCompleted = DB::table('play')
             ->join('wahana', 'wahana.id_wahana', '=', 'play.id_wahana')
             ->where('play.status', 'completed') // Hanya ambil yang completed
-            ->orderBy('play.durasi', 'asc') // Urutkan berdasarkan durasi terpendek
+            ->orderBy('play.end', 'asc') // Urutkan berdasarkan durasi terpendek
             ->select(
                 'wahana.nama_wahana',
                 'play.nama_anak',
