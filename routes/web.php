@@ -32,6 +32,9 @@ Route::get('/', function () {
 Route::get('/dashboard', [Controller::class, 'dashboard'])
 ->middleware('check.permission:dashboard')
 ->name('dashboard');
+Route::get('/playground', [Controller::class, 'playground'])
+->name('playground');
+
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/aksi_login', [LoginController::class, 'aksi_login'])->name('aksi_login');
 Route::get('/register', [LoginController::class, 'register'])->name('register');
