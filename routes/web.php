@@ -13,6 +13,7 @@ use App\Http\Controllers\RestoreEditController;
 use App\Http\Controllers\RestoreDeleteController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\BukuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,3 +108,13 @@ Route::post('/kategori/update', action: [KategoriController::class, 'updateDetai
 Route::delete('/kategori-destroy/{id_kategori}', [KategoriController::class, 'kategori_destroy'])->name('kategori.destroy');
 Route::get('/kategori/detail/{id}', [KategoriController::class, 'e_kategori'])
 ->name('e_kategori');
+
+
+// ROUTE buku
+Route::get('/buku', [BukuController::class, 'buku'])
+    ->name('buku');
+Route::post('/t_buku', [BukuController::class, 't_buku'])->name('t_buku');
+Route::post('/buku/update', action: [BukuController::class, 'updateDetail'])->name('update.buku');
+Route::delete('/buku-destroy/{id_buku}', [BukuController::class, 'buku_destroy'])->name('buku.destroy');
+Route::get('/buku/detail/{id}', [BukuController::class, 'e_buku'])
+->name('e_buku');

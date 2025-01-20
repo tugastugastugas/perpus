@@ -18,5 +18,8 @@ class Kelas extends Authenticatable
         'created_at',
         'updated_at',
     ];
-
+    public function user()
+    {
+        return $this->hasMany(User::class, 'id_kelas', 'id_kelas');
+    }
 }

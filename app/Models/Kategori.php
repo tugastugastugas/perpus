@@ -17,5 +17,8 @@ class Kategori extends Authenticatable
         'created_at',
         'updated_at',
     ];
-
+    public function buku()
+    {
+        return $this->hasMany(Buku::class, 'id_kategori', 'id_kategori');
+    }
 }

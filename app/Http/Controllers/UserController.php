@@ -162,7 +162,7 @@ class UserController extends BaseController
         ]);
 
         // Mencari pengguna berdasarkan ID
-        $user = User::findOrFail($id);
+        $user = User::with('kelas')->findOrFail($id);
         $kelas = kelas::all();
         // Mengembalikan view dengan data pengguna dan level
         echo view('header');

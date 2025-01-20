@@ -26,7 +26,7 @@
             <div class="mb-3">
                 <label class="form-label">Kelas</label>
                 <select class="form-select" id="kelas" name="kelas" required>
-                    <option value="" disabled selected>Pilih kelas</option>
+                    <option value="{{$user->kelas->id_kelas}}">{{ $user->kelas->nama_kelas}}</option>
                     @foreach ($kelas as $j)
                         <option value="{{ $j->id_kelas }}">{{ $j->nama_kelas }}</option>
                     @endforeach
