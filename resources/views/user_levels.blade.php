@@ -7,6 +7,7 @@
                     <div class="button-group">
                         <a href="{{ route('menu.permissions', 'Admin') }}" class="btn btn-primary">Admin</a>
                         <a href="{{ route('menu.permissions', 'Petugas') }}" class="btn btn-secondary">Petugas</a>
+                        <a href="{{ route('menu.permissions', 'Murid') }}" class="btn btn-secondary">Murid</a>
                     </div>
                 </div>
             </div>

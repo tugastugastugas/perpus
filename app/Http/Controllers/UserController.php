@@ -9,7 +9,7 @@ use Illuminate\Routing\Controller as BaseController;
 use App\Models\ActivityLog;
 use App\Models\User;
 use App\Models\UserHistory;
-use App\Models\Keterlambatan;
+use App\Models\Kelas;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -28,9 +28,10 @@ class UserController extends BaseController
             'description' => 'User Masuk Ke User.',
         ]);
         $user = User::all();
+        $kelas = kelas::all();
         echo view('header');
         echo view('menu');
-        echo view('user', compact('user'));
+        echo view('user', compact('user', 'kelas'));
         echo view('footer');
     }
 
@@ -55,6 +56,41 @@ class UserController extends BaseController
             $user->username = $request->input('username');
             $user->password = md5($request->input('password')); // Enkripsi password
             $user->level = $request->input('level');
+
+            // Simpan ke database
+            $user->save();
+
+            // Redirect ke halaman lain
+            return redirect()->back()->withErrors(['msg' => 'Berhasil Menambahkan Akun.']);
+        } catch (\Exception $e) {
+            // Redirect kembali dengan pesan kesalahan
+            return redirect()->back()->withErrors(['msg' => 'Gagal menambahkan akun. Silakan coba lagi.']);
+        }
+    }
+
+
+    public function t_murid(Request $request)
+    {
+        ActivityLog::create([
+            'action' => 'create',
+            'user_id' => Session::get('id'), // ID pengguna yang sedang login
+            'description' => 'User Menambah Murid.',
+        ]);
+
+        try {
+            // Validasi inputan
+            $request->validate([
+                'username' => 'required',
+                'password' => 'required',
+                'kelas' => 'required',
+            ]);
+
+            // Simpan data ke tabel user
+            $user = new User(); // Ubah variabel dari $quiz menjadi $user untuk kejelasan
+            $user->username = $request->input('username');
+            $user->password = md5($request->input('password')); // Enkripsi password
+            $user->id_kelas = $request->input('kelas');
+            $user->level = 'Murid';
 
             // Simpan ke database
             $user->save();
@@ -127,11 +163,11 @@ class UserController extends BaseController
 
         // Mencari pengguna berdasarkan ID
         $user = User::findOrFail($id);
-
+        $kelas = kelas::all();
         // Mengembalikan view dengan data pengguna dan level
         echo view('header');
         echo view('menu');
-        echo view('detail', compact('user'));
+        echo view('detail', compact('user', 'kelas'));
         echo view('footer');
     }
 

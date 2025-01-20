@@ -3,9 +3,9 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <div class="header-title">
-                    <h4 class="card-title">Wahana</h4>
+                    <h4 class="card-title">Kelas</h4>
                     <br>
-                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New Wahana</button>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New Kelas</button>
                 </div>
             </div>
             <div class="card-body">
@@ -14,24 +14,22 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Wahana</th>
-                                <th>Harga</th>
+                                <th>Nama Kelas</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($wahana as $data)
+                            @foreach($kelas as $data)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $data->nama_wahana }}</td>
-                                <td>{{ $data->harga }}</td>
+                                <td>{{ $data->nama_kelas }}</td>
                                 <td>
-                                    <a href="{{ route('e_wahana', $data->id_wahana) }}">
+                                    <a href="{{ route('e_kelas', $data->id_kelas) }}">
                                         <button class="btn btn-danger">
                                             <i class="now-ui-icons ui-1_check"></i> Edit
                                         </button>
                                     </a>
-                                    <form action="{{ route('wahana.destroy', $data->id_wahana) }}" method="POST" style="display:inline;">
+                                    <form action="{{ route('kelas.destroy', $data->id_kelas) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</button>
@@ -43,8 +41,7 @@
                         <tfoot>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Wahana</th>
-                                <th>Harga</th>
+                                <th>Nama Kelas</th>
                                 <th>Aksi</th>
                             </tr>
                         </tfoot>
@@ -60,19 +57,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addUserModalLabel">Tambah Wahana</h5>
+                <h5 class="modal-title" id="addUserModalLabel">Tambah kelas</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('t_wahana') }}" method="POST">
+                <form action="{{ route('t_kelas') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label for="nama_wahana" class="form-label">Nama Wahana</label>
-                        <input type="text" class="form-control" id="nama_wahana" name="nama_wahana" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="harga" class="form-label">Harga</label>
-                        <input type="harga" class="form-control" id="harga" name="harga" required>
+                        <label for="nama_kelas" class="form-label">Nama kelas</label>
+                        <input type="text" class="form-control" id="nama_kelas" name="nama_kelas" required>
                     </div>
                     
                     <button type="submit" class="btn btn-primary">Simpan</button>

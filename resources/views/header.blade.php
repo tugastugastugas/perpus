@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="{{ asset('css/customizer.min.css') }}" />
 
     <!-- RTL Css -->
-    <link rel="stylesheet" href="{{ asset('css/rtl.min.css" />
+    <link rel="stylesheet" href="{{ asset('css/rtl.min.css')}}"/>
 
 
 </head>

@@ -5,10 +5,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\LogController;
-use App\Http\Controllers\SuratController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\UserLevelController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\WahanaController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\RestoreEditController;
 use App\Http\Controllers\RestoreDeleteController;
 use App\Http\Controllers\BookingController;
@@ -83,42 +83,27 @@ Route::get('/user', [UserController::class, 'user'])
     ->middleware('check.permission:setting')
     ->name('user');
 Route::post('/t_user', [UserController::class, 't_user'])->name('t_user');
+Route::post('/t_murid', [UserController::class, 't_murid'])->name('t_murid');
 Route::post('/user/reset-password/{id}', [UserController::class, 'resetPassword'])->name('user.resetPassword');
 Route::post('/user/update', [UserController::class, 'updateDetail'])->name('update.user');
 Route::delete('/user-destroy/{id_user}', [UserController::class, 'user_destroy'])->name('user.destroy');
 Route::get('/user/detail/{id}', [UserController::class, 'detail'])->name('detail');
 
-// ROUTE WAHANA
-Route::get('/wahana', [WahanaController::class, 'wahana'])
-->middleware('check.permission:play')
-    ->name('wahana');
-Route::post('/t_wahana', [WahanaController::class, 't_wahana'])->name('t_wahana');
-Route::post('/wahana/update', action: [WahanaController::class, 'updateDetail'])->name('update.wahana');
-Route::delete('/wahana-destroy/{id_wahana}', [WahanaController::class, 'wahana_destroy'])->name('wahana.destroy');
-Route::get('/wahana/detail/{id}', [WahanaController::class, 'e_wahana'])
-->middleware('check.permission:play')
-->name('e_wahana');
+// ROUTE kelas
+Route::get('/kelas', [KelasController::class, 'kelas'])
+    ->name('kelas');
+Route::post('/t_kelas', [KelasController::class, 't_kelas'])->name('t_kelas');
+Route::post('/kelas/update', action: [KelasController::class, 'updateDetail'])->name('update.kelas');
+Route::delete('/kelas-destroy/{id_kelas}', [KelasController::class, 'kelas_destroy'])->name('kelas.destroy');
+Route::get('/kelas/detail/{id}', [KelasController::class, 'e_kelas'])
+->name('e_kelas');
 
-// ROUTE BOOKING
-Route::get('/booking', [BookingController::class, 'booking'])
-->middleware('check.permission:play')
-    ->name('booking');
-Route::post('/t_anak', [BookingController::class, 't_anak'])->name('t_anak');
-Route::delete('/play-destroy/{id_play}', [BookingController::class, 'play_destroy'])->name('play.destroy');
-Route::post('/update-status/{id}', [BookingController::class, 'updateStatus']);
-Route::get('/transaksi/data/{id_play}', [BookingController::class, 'getData'])->name('transaksi.data');
-Route::post('/transaksi/store', [BookingController::class, 'store'])->name('transaksi.store');
-Route::get('/send-whatsapp/{id_play}', [BookingController::class, 'sendWhatsapp']);
-Route::post('/play/add-time', [BookingController::class, 'addTime'])->name('play.addTime');
 
-// ROUTE LAPORAN TRANSAKSI
-Route::get('/transaksi', [TransaksiController::class, 'transaksi'])
-->middleware('check.permission:play')
-    ->name('transaksi');
-Route::post('/t_transaksi', [TransaksiController::class, 't_transaksi'])->name('t_transaksi');
-Route::post('/transaksi/update', action: [TransaksiController::class, 'updateDetail'])->name('update.transaksi');
-Route::delete('/transaksi-destroy/{id_transaksi}', [TransaksiController::class, 'transaksi_destroy'])->name('transaksi.destroy');
-Route::get('/transaksi/detail/{id}', [TransaksiController::class, 'e_transaksi'])->name('e_transaksi');
-
-Route::get('/transaksi/print', [TransaksiController::class, 'print'])->name('transaksi.print');
-
+// ROUTE kategori
+Route::get('/kategori', [KategoriController::class, 'kategori'])
+    ->name('kategori');
+Route::post('/t_kategori', [KategoriController::class, 't_kategori'])->name('t_kategori');
+Route::post('/kategori/update', action: [KategoriController::class, 'updateDetail'])->name('update.kategori');
+Route::delete('/kategori-destroy/{id_kategori}', [KategoriController::class, 'kategori_destroy'])->name('kategori.destroy');
+Route::get('/kategori/detail/{id}', [KategoriController::class, 'e_kategori'])
+->name('e_kategori');

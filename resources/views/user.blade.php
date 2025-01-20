@@ -6,6 +6,8 @@
                     <h4 class="card-title">User</h4>
                     <br>
                     <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User</button>
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addMuridModal">Add New Murid</button>
+
                 </div>
             </div>
             <div class="card-body">
@@ -84,6 +86,42 @@
                         <select class="form-select" id="level" name="level" required>
                             <option value="Admin">Admin</option>
                             <option value="Petugas">Petugas</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal untuk Menambah Pengguna -->
+<div class="modal fade" id="addMuridModal" tabindex="-1" aria-labelledby="addMuridModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">Tambah Pengguna</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('t_murid') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kelas</label>
+                        <select class="form-select" id="kelas" name="kelas" required>
+                            <option value="" disabled selected>Pilih kelas</option>
+                            @foreach ($kelas as $j)
+                            <option value="{{ $j->id_kelas }}">{{ $j->nama_kelas }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
