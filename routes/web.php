@@ -31,10 +31,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [Controller::class, 'dashboard'])
-->middleware('check.permission:dashboard')
-->name('dashboard');
+    ->middleware('check.permission:dashboard')
+    ->name('dashboard');
 Route::get('/playground', [Controller::class, 'playground'])
-->name('playground');
+    ->name('playground');
 
 Route::get('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/aksi_login', [LoginController::class, 'aksi_login'])->name('aksi_login');
@@ -97,7 +97,7 @@ Route::post('/t_kelas', [KelasController::class, 't_kelas'])->name('t_kelas');
 Route::post('/kelas/update', action: [KelasController::class, 'updateDetail'])->name('update.kelas');
 Route::delete('/kelas-destroy/{id_kelas}', [KelasController::class, 'kelas_destroy'])->name('kelas.destroy');
 Route::get('/kelas/detail/{id}', [KelasController::class, 'e_kelas'])
-->name('e_kelas');
+    ->name('e_kelas');
 
 
 // ROUTE kategori
@@ -107,14 +107,28 @@ Route::post('/t_kategori', [KategoriController::class, 't_kategori'])->name('t_k
 Route::post('/kategori/update', action: [KategoriController::class, 'updateDetail'])->name('update.kategori');
 Route::delete('/kategori-destroy/{id_kategori}', [KategoriController::class, 'kategori_destroy'])->name('kategori.destroy');
 Route::get('/kategori/detail/{id}', [KategoriController::class, 'e_kategori'])
-->name('e_kategori');
+    ->name('e_kategori');
 
 
 // ROUTE buku
 Route::get('/buku', [BukuController::class, 'buku'])
     ->name('buku');
+Route::get('/buku_petugas', [BukuController::class, 'buku_petugas'])
+    ->name('buku_petugas');
 Route::post('/t_buku', [BukuController::class, 't_buku'])->name('t_buku');
 Route::post('/buku/update', action: [BukuController::class, 'updateDetail'])->name('update.buku');
 Route::delete('/buku-destroy/{id_buku}', [BukuController::class, 'buku_destroy'])->name('buku.destroy');
 Route::get('/buku/detail/{id}', [BukuController::class, 'e_buku'])
-->name('e_buku');
+    ->name('e_buku');
+Route::get('/buku/show/{id}', [BukuController::class, 'buku_show'])
+    ->name('buku.show');
+// routes/web.php
+Route::get('/buku/filter/{kategori?}', [BukuController::class, 'filterKategori'])->name('buku.filter');
+Route::get('/buku_saya', [BukuController::class, 'buku_saya'])
+    ->name('buku_saya');
+Route::get('/buku_saya/filter/{kategori?}', [BukuController::class, 'filterKategoriUser'])->name('buku_filter_user');
+
+
+Route::get('/back', function () {
+    return redirect()->back();
+});

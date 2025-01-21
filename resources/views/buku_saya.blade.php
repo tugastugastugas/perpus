@@ -5,7 +5,35 @@
                 <div class="header-title">
                     <h4 class="card-title">Buku</h4>
                     <br>
+                    <form action="{{ route('buku_filter_user', ['kategori' => request('kategori')]) }}" method="GET"
+                        id="filterForm">
+                        <div class="d-flex">
+                            <select class="form-select me-2" id="kategoriFilter" name="kategori"
+                                onchange="this.form.submit()">
+                                <option value="" disabled selected>Pilih kategori</option>
+                                <option value="">Semua Kategori</option> <!-- Opsi untuk reset filter -->
+                                @foreach($kategori as $kat)
+                                    <option value="{{ $kat->id_kategori }}" {{ request('kategori') == $kat->id_kategori ? 'selected' : '' }}>
+                                        {{ $kat->nama_kategori }}
+                                    </option>
+                                @endforeach
+                            </select>
 
+                            <!-- Tambahkan input pencarian -->
+                            <input type="text" name="search" class="form-control" placeholder="Cari buku..."
+                                value="{{ request('search') }}">
+
+                            <button type="submit" class="btn btn-outline-primary ms-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-search" viewBox="0 0 16 16">
+                                    <path
+                                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                </svg> Seach
+                            </button>
+                        </div>
+                    </form>
+
+                    <br>
                     <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
                         data-bs-target="#addUserModal">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" fill="currentColor"
@@ -18,71 +46,37 @@
                                 d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
                         </svg> Add New Buku
                     </button>
-                    <br><br>
-                    <form action="{{ route('buku.filter', ['kategori' => request('kategori')]) }}" method="GET"
-                        id="filterForm">
-                        <div class="d-flex">
-                            <select class="form-select me-2" id="kategoriFilter" name="kategori"
-                                onchange="this.form.submit()">
-                                <option value="" disabled selected>Pilih kategori</option>
-                                <option value="">Semua Kategori</option>
-                                @foreach($kategori as $kat)
-                                    <option value="{{ $kat->id_kategori }}" {{ request('kategori') == $kat->id_kategori ? 'selected' : '' }}>
-                                        {{ $kat->nama_kategori }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <input type="text" name="search" class="form-control" placeholder="Cari buku..."
-                                value="{{ request('search') }}">
-                            <button type="submit" class="btn btn-outline-primary ms-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-search" viewBox="0 0 16 16">
-                                    <path
-                                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                                </svg> Search
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
-
             <div class="card-body">
-                @if(!$kelasSudahUpload)
-                    <div class="alert alert-warning">
-                        <strong>Perhatian!</strong> Kelas Anda belum meng-upload buku. Silakan upload buku terlebih dahulu
-                        untuk melihat daftar buku.
-                    </div>
-                @else
-                    <div class="table-responsive">
-                        <div class="row">
-                            @foreach($buku as $data)
-                                @if(!request('kategori') || $data->id_kategori == request('kategori'))
-                                    <div class="col-md-3">
-                                        <div class="card mb-4">
-                                            <img src="{{ asset('storage/' . $data->cover_buku) }}" class="card-img-top buku"
-                                                alt="Cover Buku" style="height: 550px; object-fit: cover;">
-                                            <div class="card-body text-center">
-                                                <h6 class="card-title">{{ $data->nama_buku }}</h6>
-                                                <a href="{{ route('buku.show', $data->id_buku) }}" class="btn btn-sm btn-primary">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                        fill="currentColor" class="bi bi-ui-radios-grid" viewBox="0 0 16 16">
-                                                        <path
-                                                            d="M3.5 15a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5m9-9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5m0 9a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5M16 3.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-9 9a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m5.5 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-9-11a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m0 2a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
-                                                    </svg> Detail
-                                                </a>
-                                            </div>
+                <div class="table-responsive">
+                    <div class="row">
+                        @foreach($buku as $data)
+                            @if(!request('kategori') || $data->id_kategori == request('kategori'))
+                                <div class="col-md-3">
+                                    <div class="card mb-4">
+                                        <img src="{{ asset('storage/' . $data->cover_buku) }}" class="card-img-top"
+                                            alt="Cover Buku" style="height: 500px; object-fit: cover;">
+                                        <div class="card-body text-center">
+                                            <h6 class="card-title">{{ $data->nama_buku }}</h6>
+                                            <a href="{{ route('buku.show', $data->id_buku) }}" class="btn btn-sm btn-primary">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    fill="currentColor" class="bi bi-ui-radios-grid" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M3.5 15a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5m9-9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5m0 9a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5M16 3.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-9 9a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m5.5 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m-9-11a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m0 2a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                                                </svg> Detail
+                                            </a>
                                         </div>
                                     </div>
-                                @endif
-                            @endforeach
-                        </div>
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
-                @endif
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -94,7 +88,7 @@
             <div class="modal-body">
                 <form action="{{ route('t_buku') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <div class="mb-3 buku">
+                    <div class="mb-3">
                         <label class="form-label">Kategori</label>
                         <select class="form-select" id="kategori" name="kategori" required>
                             <option value="" disabled selected>Pilih kategori</option>
@@ -181,7 +175,7 @@
     document.getElementById('kategoriFilter').addEventListener('change', function () {
         const selectedCategory = this.value;
         const filterForm = document.getElementById('filterForm');
-        filterForm.action = "{{ route('buku.filter', '') }}" + "/" + selectedCategory;
+        filterForm.action = "{{ route('buku_filter_user', '') }}" + "/" + selectedCategory;
         filterForm.submit();
     });
 </script>

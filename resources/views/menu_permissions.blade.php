@@ -24,9 +24,16 @@
                         </div>
                         <div class="form-group">
                             <label>
-                                <input type="checkbox" name="menus[]" value="Play"
-                                    {{ isset($permissions['Play']) && $permissions['Play'] ? 'checked' : '' }}>
-                                Play
+                                <input type="checkbox" name="menus[]" value="Buku"
+                                    {{ isset($permissions['Buku']) && $permissions['Buku'] ? 'checked' : '' }}>
+                                Buku
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" name="menus[]" value="Master_Data"
+                                    {{ isset($permissions['Master_Data']) && $permissions['Master_Data'] ? 'checked' : '' }}>
+                                Master Data
                             </label>
                         </div>
                         <button type="submit" class="btn btn-primary">Save Permissions</button>

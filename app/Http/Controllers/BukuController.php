@@ -15,13 +15,79 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-
+use Carbon\Carbon;
 
 class BukuController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function Buku()
+    public function buku()
+{
+    ActivityLog::create([
+        'action' => 'create',
+        'user_id' => Session::get('id'), // ID pengguna yang sedang login
+        'description' => 'User Masuk Ke Buku.',
+    ]);
+
+    $userId = Session::get('id'); // Ambil id user dari session
+    $user = User::find($userId);
+    $kelas = $user->kelas; // Mengambil kelas berdasarkan relasi di model User
+
+    // Memeriksa apakah kelas sudah melakukan upload buku dan tanggal terakhir upload lebih dari sebulan
+    $kelasSudahUpload = false;
+    if ($kelas && $kelas->tanggal_terakhir_upload) {
+        $tanggalTerakhirUpload = Carbon::parse($kelas->tanggal_terakhir_upload);
+        $kelasSudahUpload = $tanggalTerakhirUpload->diffInMonths(now()) < 1; // Jika kurang dari 1 bulan
+    }
+
+    $buku = Buku::with('kategori')->get();
+    $kategori = Kategori::all();
+
+    echo view('header');
+    echo view('menu');
+    echo view('buku', compact('kategori', 'buku', 'kelasSudahUpload'));
+    echo view('footer');
+}
+
+    public function filterKategori(Request $request)
+    {
+        $buku = Buku::query();
+        
+        $userId = Session::get('id'); // Ambil id user dari session
+        $user = User::find($userId);
+        $kelas = $user->kelas; // Mengambil kelas berdasarkan relasi di model User
+    
+        // Memeriksa apakah kelas sudah melakukan upload buku dan tanggal terakhir upload lebih dari sebulan
+        $kelasSudahUpload = false;
+        if ($kelas && $kelas->tanggal_terakhir_upload) {
+            $tanggalTerakhirUpload = Carbon::parse($kelas->tanggal_terakhir_upload);
+            $kelasSudahUpload = $tanggalTerakhirUpload->diffInMonths(now()) < 1; // Jika kurang dari 1 bulan
+        }
+
+        // Menambahkan filter berdasarkan kategori
+        if ($request->kategori) {
+            $buku->where('id_kategori', $request->kategori);
+        }
+
+        // Menambahkan filter berdasarkan pencarian
+        if ($request->search) {
+            $buku->where('nama_buku', 'like', '%' . $request->search . '%');
+        }
+
+        // Ambil data buku dan kategori
+        $buku = $buku->get();
+        $kategori = Kategori::all();
+
+        // Return view dengan data
+        echo view('header');
+        echo view('menu');
+        echo view('buku', compact('kategori', 'buku', 'kelasSudahUpload'));
+        echo view('footer');
+    }
+
+
+
+    public function buku_petugas()
     {
         ActivityLog::create([
             'action' => 'create',
@@ -32,7 +98,26 @@ class BukuController extends BaseController
         $kategori = Kategori::all();
         echo view('header');
         echo view('menu');
-        echo view('buku', compact('kategori', 'buku'));
+        echo view('buku_petugas', compact('kategori', 'buku'));
+        echo view('footer');
+    }
+
+    public function buku_show($id)
+    {
+        ActivityLog::create([
+            'action' => 'create',
+            'user_id' => Session::get('id'), // ID pengguna yang sedang login
+            'description' => 'User Masuk Ke Edit Buku.',
+        ]);
+
+        // Mencari pengguna berdasarkan ID
+        $buku = buku::with('kategori')->findOrFail($id);
+        $kategori = kategori::all();
+
+        // Mengembalikan view dengan data pengguna dan level
+        echo view('header');
+        echo view('menu');
+        echo view('buku_show', compact('kategori', 'buku'));
         echo view('footer');
     }
 
@@ -50,12 +135,17 @@ class BukuController extends BaseController
                 'kategori' => 'required',
                 'nama_buku' => 'required',
                 'pengarang' => 'required',
-                'genre' => 'required',
+                'genre' => 'required|array',
                 'penerbit' => 'required',
                 'tahun_terbit' => 'required',
                 'file_buku' => 'required',
                 'cover_buku' => 'required',
             ]);
+
+            $id_user = Session::get('id');
+            // Ambil kelas pengguna berdasarkan id_user
+            $user = User::find($id_user);
+            $kelas = $user->kelas; 
 
             $lastBook = Buku::orderBy('id_buku', 'desc')->first(); // Ambil buku terakhir berdasarkan ID
             $lastId = $lastBook ? $lastBook->id_buku : 0; // Ambil ID terakhir atau 0 jika belum ada buku
@@ -68,17 +158,18 @@ class BukuController extends BaseController
             $buku->kode_buku = $kodeBuku;
             $buku->nama_buku = $request->input('nama_buku');
             $buku->pengarang = $request->input('pengarang');
-            $buku->genre = $request->input('genre');
+            $buku->genre = json_encode($request->genre);
             $buku->penerbit = $request->input('penerbit');
             $buku->tahun_terbit = $request->input('tahun_terbit');
             $buku->tanggal_upload = now();
+            $buku->id_user = $id_user;
 
             if ($request->hasFile('cover_buku')) {
                 $cover_buku = $request->file('cover_buku');
                 $cover_buku_name = $cover_buku->getClientOriginalName();  // Mendapatkan nama asli file
                 $buku->cover_buku = $cover_buku->storeAs('cover_buku', $cover_buku_name, 'public');  // Menyimpan dengan nama asli
             }
-    
+
             if ($request->hasFile('file_buku')) {
                 $file_buku = $request->file('file_buku');
                 $file_buku_name = $file_buku->getClientOriginalName();  // Mendapatkan nama asli file
@@ -86,6 +177,11 @@ class BukuController extends BaseController
             }
             // Simpan ke database
             $buku->save();
+
+            if ($kelas) {
+                $kelas->tanggal_terakhir_upload = now();
+                $kelas->save(); // Simpan perubahan ke tabel kelas
+            }
 
             // Redirect ke halaman lain
             return redirect()->back()->withErrors(['msg' => 'Berhasil Menambahkan Akun.']);
@@ -109,7 +205,7 @@ class BukuController extends BaseController
         $buku->delete(); // Simpan perubahan
 
         // Redirect dengan pesan sukses
-        return redirect()->route('buku')->with('success', 'Data user berhasil dihapus');
+        return redirect()->back()->with('success', 'Data user berhasil dihapus');
     }
 
     public function e_buku($id)
@@ -166,14 +262,14 @@ class BukuController extends BaseController
             // Menangani upload cover buku
             if ($request->hasFile('cover_buku')) {
                 $cover_buku = $request->file('cover_buku');
-                $cover_buku_name = $cover_buku->getClientOriginalName();  
+                $cover_buku_name = $cover_buku->getClientOriginalName();
                 $buku->cover_buku = $cover_buku->storeAs('cover_buku', $cover_buku_name, 'public');
             }
 
             // Menangani upload file buku
             if ($request->hasFile('file_buku')) {
                 $file_buku = $request->file('file_buku');
-                $file_buku_name = $file_buku->getClientOriginalName();  
+                $file_buku_name = $file_buku->getClientOriginalName();
                 $buku->file_buku = $file_buku->storeAs('file_buku', $file_buku_name, 'public');
             }
 
@@ -189,4 +285,51 @@ class BukuController extends BaseController
             return redirect()->back()->withErrors(['msg' => 'Gagal memperbarui detail pengguna. Silakan coba lagi.']);
         }
     }
+
+    public function buku_saya()
+    {
+        ActivityLog::create([
+            'action' => 'create',
+            'user_id' => Session::get('id'), // ID pengguna yang sedang login
+            'description' => 'User Masuk Ke Buku.',
+        ]);
+        $buku = Buku::where('id_user', Session::get('id')) // Filter berdasarkan id_user
+            ->with('kategori') // Memuat relasi kategori
+            ->get();
+        $kategori = Kategori::all();
+        echo view('header');
+        echo view('menu');
+        echo view('buku_saya', compact('kategori', 'buku'));
+        echo view('footer');
+    }
+
+    public function filterKategoriUser(Request $request)
+    {
+        $buku = Buku::query();
+
+        // Menambahkan filter berdasarkan id_user (ID pengguna yang sedang login)
+        $buku->where('id_user', Session::get('id')); // Menambahkan filter berdasarkan id_user
+
+        // Menambahkan filter berdasarkan kategori
+        if ($request->kategori) {
+            $buku->where('id_kategori', $request->kategori);
+        }
+
+        // Menambahkan filter berdasarkan pencarian
+        if ($request->search) {
+            $buku->where('nama_buku', 'like', '%' . $request->search . '%');
+        }
+
+        // Ambil data buku dan kategori
+        $buku = $buku->get();
+        $kategori = Kategori::all();
+
+        // Return view dengan data
+        echo view('header');
+        echo view('menu');
+        echo view('buku_saya', compact('kategori', 'buku'));
+        echo view('footer');
+    }
+
+
 }

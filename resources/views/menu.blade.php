@@ -182,7 +182,7 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                         <span class="mini-icon">-</span>
                     </a>
                 </li> -->
-                @if(Permission::hasAccess($userLevel, 'play'))
+                @if(Permission::hasAccess($userLevel, 'master_data'))
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-special" role="button" aria-expanded="false" aria-controls="sidebar-special">
                         <i class="icon">
@@ -225,11 +225,24 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                                 <span class="item-name">Kategori</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link " href="{{route ('buku_petugas')}}">
+                                <i class="icon">
+                                    <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                                        <g>
+                                            <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                                        </g>
+                                    </svg>
+                                </i>
+                                <i class="sidenav-mini-icon"> C </i>
+                                <span class="item-name">Buku Petugas</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @endif
 
-                @if(Permission::hasAccess($userLevel, 'play'))
+                @if(Permission::hasAccess($userLevel, 'buku'))
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-special2" role="button" aria-expanded="false" aria-controls="sidebar-special">
                         <i class="icon">
@@ -260,7 +273,7 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="{{route ('kategori')}}">
+                            <a class="nav-link " href="{{route ('buku_saya')}}">
                                 <i class="icon">
                                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                                         <g>
@@ -269,7 +282,7 @@ $userLevel =session()->get('level'); // Sesuaikan dengan cara Anda menyimpan lev
                                     </svg>
                                 </i>
                                 <i class="sidenav-mini-icon"> C </i>
-                                <span class="item-name">Kategori</span>
+                                <span class="item-name">Buku Saya</span>
                             </a>
                         </li>
                     </ul>
