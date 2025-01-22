@@ -1,3 +1,15 @@
+<style>
+    .genre-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px; /* Jarak antar checkbox */
+    }
+
+    .form-check {
+        width: calc(20% - 10px); /* Membagi ke 5 kolom dalam baris */
+    }
+</style>
+
 <div class="row">
     <div class="col-sm-12">
         <div class="card">
@@ -60,7 +72,7 @@
                                     <div class="col-md-3">
                                         <div class="card mb-4">
                                             <img src="{{ asset('storage/' . $data->cover_buku) }}" class="card-img-top buku"
-                                                alt="Cover Buku" style="height: 550px; object-fit: cover;">
+                                                alt="Cover Buku" style="height: 700px; width: auto;">
                                             <div class="card-body text-center">
                                                 <h6 class="card-title">{{ $data->nama_buku }}</h6>
                                                 <a href="{{ route('buku.show', $data->id_buku) }}" class="btn btn-sm btn-primary">
@@ -85,7 +97,7 @@
 
 
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addUserModalLabel">Tambah Buku</h5>
@@ -113,41 +125,112 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Genre</label>
-                        <div>
+                        <div class="genre-container">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="Fiksi" id="genreFiksi"
                                     name="genre[]">
-                                <label class="form-check-label" for="genreFiksi">
-                                    Fiksi
-                                </label>
+                                <label class="form-check-label" for="genreFiksi">Fiksi</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="Non-Fiksi" id="genreNonFiksi"
                                     name="genre[]">
-                                <label class="form-check-label" for="genreNonFiksi">
-                                    Non-Fiksi
-                                </label>
+                                <label class="form-check-label" for="genreNonFiksi">Non-Fiksi</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Biografi" id="genreBiografi"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreBiografi">Biografi</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Education" id="genreEducation"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreEducation">Education</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Guide Book" id="genreGuideBook"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreGuideBook">Guide Book</label>
+                            </div>
+                            <!-- Tambahkan genre lainnya sesuai kebutuhan -->
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Action" id="genreAction"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreAction">Action</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Adventure" id="genreAdventure"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreAdventure">Adventure</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="Komedi" id="genreKomedi"
                                     name="genre[]">
-                                <label class="form-check-label" for="genreKomedi">
-                                    Komedi
-                                </label>
+                                <label class="form-check-label" for="genreKomedi">Komedi</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="Drama" id="genreDrama"
                                     name="genre[]">
-                                <label class="form-check-label" for="genreDrama">
-                                    Drama
-                                </label>
+                                <label class="form-check-label" for="genreDrama">Drama</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="Romance" id="genreRomantis"
+                                <input class="form-check-input" type="checkbox" value="Romance" id="genreRomance"
                                     name="genre[]">
-                                <label class="form-check-label" for="genreRomantis">
-                                    Romance
-                                </label>
+                                <label class="form-check-label" for="genreRomance">Romance</label>
+                            </div>
+                            <!-- Tambahkan genre lainnya sesuai kebutuhan -->
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Crime" id="genreCrime"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreCrime">Crime</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Mystery" id="genreMystery"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreMystery">Mystery</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Fantasy" id="genreFantasy"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreFantasy">Fantasy</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="History" id="genreHistory"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreHistory">History</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Horror" id="genreHorror"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreHorror">Horror</label>
+                            </div>
+                            <!-- Tambahkan genre lainnya sesuai kebutuhan -->
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Thriller" id="genreThriller"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreThriller">Thriller</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Cyberpunk" id="genreCyberpunk"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreCyberpunk">Cyberpunk</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="SliceOfLife" id="genreSliceOfLife"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreSliceOfLife">Slice Of Life</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Animal" id="genreAnimal"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreAnimal">Animal</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="Other" id="genreOther"
+                                    name="genre[]">
+                                <label class="form-check-label" for="genreOther">Other</label>
                             </div>
                             <!-- Tambahkan genre lainnya sesuai kebutuhan -->
                         </div>

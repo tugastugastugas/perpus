@@ -56,7 +56,7 @@
                                 <div class="col-md-3">
                                     <div class="card mb-4">
                                         <img src="{{ asset('storage/' . $data->cover_buku) }}" class="card-img-top"
-                                            alt="Cover Buku" style="height: 500px; object-fit: cover;">
+                                            alt="Cover Buku" style="height: 700px; width: auto;">
                                         <div class="card-body text-center">
                                             <h6 class="card-title">{{ $data->nama_buku }}</h6>
                                             <a href="{{ route('buku.show', $data->id_buku) }}" class="btn btn-sm btn-primary">
